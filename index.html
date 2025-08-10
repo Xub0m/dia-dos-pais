@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feliz Dia dos Pais — Street Fighter + Clássicos</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Montserrat:wght@600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body,
+    #root {
+      height: 100%
+    }
+
+    body {
+      font-family: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color: #fff;
+      background: #000;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image: url('./assets/background.gif');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      filter: saturate(0.95) contrast(1.02);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.55) 70%);
+    }
+
+    /* personagens laterais */
+    .side-character {
+      position: fixed;
+      top: 75%;
+      transform: translateY(-50%);
+      z-index: -1;
+      width: 400px;
+      /* tamanho fixo */
+      height: auto;
+      /* mantém proporção */
+      pointer-events: none;
+    }
+
+    .side-left {
+      left: 0;
+    }
+
+    .side-right {
+      right: 0;
+      transform: translateY(-50%) scaleX(-1);
+      /* move para centro e espelha */
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-radius: 18px;
+      backdrop-filter: blur(6px) saturate(1.05);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .headline {
+      font-family: 'Montserrat', 'Rubik', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      letter-spacing: 1px;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      text-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+    }
+
+    .headline .word {
+      display: inline-block;
+      transform-origin: center;
+      animation: floaty 3.5s ease-in-out infinite;
+    }
+
+    .headline .word:nth-child(2) {
+      animation-delay: .12s
+    }
+
+    .headline .word:nth-child(3) {
+      animation-delay: .25s
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg)
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(-1.2deg)
+      }
+    }
+
+    .sub {
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      opacity: 0.95;
+      margin-bottom: 1.7rem;
+    }
+
+    .cta {
+      display: inline-block;
+      padding: .9rem 1.6rem;
+      font-weight: 700;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(255, 180, 0, 0.12), rgba(255, 90, 90, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4)
+    }
+
+    .credits {
+      margin-top: 1.4rem;
+      font-size: .85rem;
+      opacity: .8
+    }
+
+    @media (max-width:520px) {
+      .card {
+        padding: 2rem;
+        border-radius: 12px
+      }
+
+      .headline {
+        font-size: 2rem
+      }
+
+      .side-character {
+        display: none
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .headline .word {
+        animation: none
+      }
+    }
+
+    .painel button {
+      position: absolute;
+    }
+
+    #nao {
+      position: fixed;
+      z-index: 1000; /* fica por cima de tudo */
+      display: inline-block;
+      padding: .9rem 1.6rem;
+      font-weight: 700;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(255, 180, 0, 0.12), rgba(255, 90, 90, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    #sim {
+      display: inline-block;
+      padding: .9rem 1.6rem;
+      font-weight: 700;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(255, 180, 0, 0.12), rgba(255, 90, 90, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      margin-left: -90px;
+      transition: transform .18s ease, box-shadow .18s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <!-- personagens de desenhos antigos -->
+  <img class="side-character side-left" src='./assets/parry-street-fighter.gif' alt="Personagem antigo à esquerda">
+  <img class="side-character side-right" src="./assets/parry-street-fighter.gif" alt="Personagem antigo à direita">
+
+  <main class="container" id="root">
+    <section class="card">
+      <h1 class="headline">
+        <span class="word">Feliz</span>
+        <span class="word">Dia</span>
+        <span class="word">dos Pais</span>
+      </h1>
+      <p class="sub">Valeu por ser essa homem foda que sempre me ajudou e me colocou pra cima quando eu precisava.</p>
+      <p class="sub">Eu te Amo pai, espero que tenha um Dia dos Pais incrivel.</p>
+      <!-- <a class="cta" href="#" id="btn-message">Enviar mensagem pro papai</a> -->
+      <!-- <div class="credits">Eu te Amo pai espero que tenha um dia dos Pais incrivel.</div> -->
+
+      <div class="painel">
+
+        <h1>Ficou bom?</h1>
+        <button id="sim"> Sim! </button>
+        <button onmouseover="fuja()" id="nao"> Não! </button>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    function fuja() {
+      var botaoNao = document.getElementById("nao");
+
+      var larguraJanela = window.innerWidth;
+      var alturaJanela = window.innerHeight;
+
+      var margem = 10; // margem de segurança em px
+
+      var maxX = larguraJanela - botaoNao.offsetWidth - margem;
+      var maxY = alturaJanela - botaoNao.offsetHeight - margem;
+
+      var aleatorioX = Math.floor(Math.random() * (maxX - margem) + margem);
+      var aleatorioY = Math.floor(Math.random() * (maxY - margem) + margem);
+
+      botaoNao.style.left = aleatorioX + "px";
+      botaoNao.style.top = aleatorioY + "px";
+    }
+  </script>
+</body>
+
+</html>
